@@ -1,0 +1,9 @@
+# Check for unauthorized SQL commands
+# Log file: /var/log/mysql/mysql.log
+
+# Example:
+grep "CREATE USER" /var/log/mysql/mysql.log
+grep "GRANT" /var/log/mysql/mysql.log
+
+# Or use tail for real-time monitoring:
+tail -f /var/log/mysql/mysql.log

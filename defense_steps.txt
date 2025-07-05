@@ -1,0 +1,15 @@
+1. Disable Remote Access to MySQL:
+----->sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+------>bind-address = 127.0.0.1
+
+2. Remove Unused or Weak Users:
+------>DROP USER 'testuser'@'%';
+------>DROP USER 'hacker'@'%';
+
+3. Use Strong Password Policies:
+------>SHOW VARIABLES LIKE 'validate_password%';
+
+4. Enable MySQL Logging:
+----->sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+------>general_log = 1
+------>general_log_file = /var/log/mysql/mysql.log

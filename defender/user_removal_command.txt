@@ -1,0 +1,4 @@
+-- SQL commands to remove unauthorized or test users
+DROP USER 'testuser'@'%';
+DROP USER 'hacker'@'%';
+FLUSH PRIVILEGES;

@@ -1,0 +1,9 @@
+# MySQL Hardening Configuration
+# File: /etc/mysql/mysql.conf.d/mysqld.cnf
+
+# Restrict MySQL to localhost only
+bind-address = 127.0.0.1
+
+# Enabling general log for auditing
+general_log = 1
+general_log_file = /var/log/mysql/mysql.log
